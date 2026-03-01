@@ -80,5 +80,10 @@ payload=$(
 "
 )
 
-printf "PR #%s feedback payload:\n%s\n\n" "$PR_NUMBER" "$payload"
-printf "%s\n" "tell me whether the item was already fixed OR should be fixed OR you dont think it should be fixed"
+OUTPUT_DIR="reviews_triage"
+mkdir -p "$OUTPUT_DIR"
+timestamp="$(date +%Y%m%d-%H%M%S)"
+output_file="${OUTPUT_DIR}/pr-${PR_NUMBER}-feedback-${timestamp}.json"
+printf "%s\n" "$payload" > "$output_file"
+
+printf "%s\n" "$output_file"
