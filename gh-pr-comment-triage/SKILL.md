@@ -1,6 +1,6 @@
 ---
 name: gh-pr-comment-triage
-description: Fetch GitHub pull request feedback for a PR number and triage each comment/review item as already fixed, should be fixed, or should not be fixed. Use when the user asks to evaluate GitHub PR feedback status from `gh pr view`.
+description: Fetch GitHub pull request feedback for a PR number and triage each comment/review item as already fixed, high-level, should be fixed, or should not be fixed. Use when the user asks to evaluate GitHub PR feedback status from `gh pr view`.
 ---
 
 # Gh Pr Comment Triage
@@ -15,23 +15,51 @@ description: Fetch GitHub pull request feedback for a PR number and triage each 
    - `author_name`
    - `decision`
    - `minimal_comment_summary`
+   - `severity` (integer 0-3)
+   - `category` (one lowercase word)
+   - `reviewing_agent` (the current agent's own name, for example `codex`)
 5. Persist the JSON array in SQLite by piping it to:
    - `scripts/store_triage_decisions.py --pr-number <pr-number>`
-6. Return a triage list that uses only these statuses:
+6. Classify each item with exactly one of these statuses:
    - `already fixed`
+   - `high-level`
    - `should be fixed`
    - `should not be fixed`
 
 Use the returned JSON as the source of truth.
 
+Always set `reviewing_agent` to your own agent name for every triage record so the database shows who performed the review.
+
 ## Response Requirements
 
-After reading the data, tell the caller:
+Use these category examples when labeling feedback:
+- `types`
+- `react`
+- `database`
+- `api`
+- `tests`
+- `security`
+- `performance`
+- `ci`
+- `deploy`
+- `docs`
+- `accessibility`
+- `styling`
+- `state`
 
-`tell me whether the item was already fixed OR should be fixed OR you dont think it should be fixed`
+Severity guidance:
+- `0` = trivial/nit
+- `1` = low impact
+- `2` = medium impact
+- `3` = critical risk
 
-For each item, include:
-- One status from the allowed list
-- A one-sentence rationale
+Mark an item as `high-level` when it is broad direction, non-actionable guidance, or a deploy/status note rather than a concrete fix request.
 
-Also include the exact JSON array you persisted so the storage step is auditable.
+Final user-facing response rules:
+- Do not return raw JSON.
+- Do not dump a complete item-by-item bug list.
+- Return a de-duplicated summary of feedback themes grouped by classification
+- Include justification for items that  `should not be fixed`
+- Include a concrete plan for items that `should be fixed`, prioritized by severity.
+- Mention `already fixed` and `high-level` as concise rollups (counts and short rationale), not exhaustive listings.
+- Tell the user they can type 'y' to implement the suggested fixes. And if they respond with 'y', implement the fixes automatically.
