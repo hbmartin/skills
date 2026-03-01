@@ -1,0 +1,4 @@
+interface:
+  display_name: "Voice Progress"
+  short_description: "Announce task progress with macOS speech"
+  default_prompt: "During non-trivial tasks in both Default and Plan collaboration modes, emit concise progress updates at task start, each phase transition, blocker detection with recovery action, verification start, and completion. Before any user-input request, emit an explicit spoken/text cue that input is needed. In Plan mode, use request_user_input after the cue; in Default mode, ask directly after the cue. For any step or wait lasting over 60 seconds, emit an interim update every 60 seconds."

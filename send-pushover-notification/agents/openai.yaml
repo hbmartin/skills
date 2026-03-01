@@ -1,0 +1,4 @@
+interface:
+  display_name: "Pushover Complete"
+  short_description: "Send a completion alert via Pushover with env checks."
+  default_prompt: "Send a Pushover completion notification and verify PUSHOVER_API_TOKEN plus PUSHOVER_USER_KEY before calling curl."

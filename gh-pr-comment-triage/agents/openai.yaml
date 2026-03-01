@@ -1,0 +1,4 @@
+interface:
+  display_name: "PR Comment Triage"
+  short_description: "Fetch PR comments/reviews and classify fix status"
+  default_prompt: "Given a PR number, run the skill script to fetch PR comments/reviews, classify each item as already fixed OR should be fixed OR should not be fixed, create JSON with comment_id/author_name/decision/minimal_comment_summary, then persist it by piping into scripts/store_triage_decisions.py --pr-number <pr-number>."
