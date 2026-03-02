@@ -26,7 +26,6 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--db-path",
         type=Path,
-        default=Path(__file__).resolve().parent.parent / "data" / "triage_decisions.db",
     )
     return parser.parse_args()
 

@@ -20,7 +20,7 @@ description: Fetch GitHub pull request feedback for a PR number and triage each 
    - `category` (one lowercase word)
    - `reviewing_agent` (the current agent's own name, for example `codex`)
 6. Persist the JSON array in SQLite by piping it to:
-   - `scripts/store_triage_decisions.py --pr-number <pr-number>`
+   - `scripts/store_triage_decisions.py --pr-number <pr-number> <repo_path>/triage_decisions.db`
 7. Classify each item with exactly one of these statuses:
    - `already fixed`
    - `high-level`
@@ -62,5 +62,6 @@ Final user-facing response rules:
 - Return a de-duplicated summary of feedback themes grouped by classification
 - Include justification for items that  `should not be fixed`
 - Include a concrete plan for items that `should be fixed`, prioritized by severity.
+- The concrete plan should inspect high severity issues and offer suggestions for depcruise and/or semgrep rules to prevent those issues fro re-occuring
 - Mention `already fixed` and `high-level` as concise rollups (counts and short rationale), not exhaustive listings.
 - Tell the user they can type 'y' to implement the suggested fixes. And if they respond with 'y', implement the fixes automatically.
